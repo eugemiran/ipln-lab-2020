@@ -1,7 +1,7 @@
 import numpy as np
 
 # data I/O
-data = open('resources/corpus_espanol.txt', 'r').read() # should be simple plain text file
+data = open('../resources/input.txt', 'r').read() # should be simple plain text file
 chars = list(set(data))
 data_size, vocab_size = len(data), len(chars)
 print("data size characters", data_size)
