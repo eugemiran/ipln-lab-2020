@@ -8,31 +8,33 @@ from keras.layers import Dense
 from keras.layers import Flatten
 from keras.layers import Embedding
 
-# define documents
-docs = ['Negros de mierda hay que matarlos a todos!',
-		'Zurdos hijos de puta los detesto',
-		'Me dan asco los pobres',
-		'Puta de mierda igual que tu vieja',
-		'Los politicos son la mierda mas grande que existe',
-		'No me gusta nada la politica',
-		'Estoy a la alutra de los grandes politicos',
-		'Tus comentarios me parecen horribles',
-		'Hay que luchar por los pobres',
-		'Puta vida me jugo una mala pasada']
-	
-# define class labels
-labels = array([1,1,1,1,1,0,0,0,0,0])
+def readFile(path):
+	with open(path, "r") as myfile:
+		max_size = 0
+		docs = []
+		labels = []
+		for line in myfile.readlines():
+			line_size = len(line)
+			if (line_size > max_size):
+				max_size = line_size
+			docs.append(line[:line_size-2])
+			labels.append(int(line[line_size-2]))
+		return docs, labels, max_size
+
+train_data, train_class, max_size_train = readFile("../../resources/train.csv")
+validation_data, validation_class, max_size_validation = readFile("../../resources/val.csv")
+test_data, test_class, max_size_test = readFile("../../resources/test.csv")
+max_size = max(max_size_train, max_size_validation, max_size_test)
+
 # prepare tokenizer
 t = Tokenizer()
-t.fit_on_texts(docs)
+t.fit_on_texts(train_data)
 vocab_size = len(t.word_index) + 1
+
 # integer encode the documents
-encoded_docs = t.texts_to_sequences(docs)
-print(encoded_docs)
-# pad documents to a max length of 20 words
-max_length = 20
-padded_docs = pad_sequences(encoded_docs, maxlen=max_length, padding='post')
-print(padded_docs)
+encoded_docs = t.texts_to_sequences(train_data)
+padded_docs = pad_sequences(encoded_docs, maxlen=max_size, padding='post')
+
 # load the whole embedding into memory
 embeddings_index = dict()
 f = open('../../resources/fasttext.es.300.txt')
@@ -50,9 +52,10 @@ for word, i in t.word_index.items():
 	embedding_vector = embeddings_index.get(word)
 	if embedding_vector is not None:
 		embedding_matrix[i] = embedding_vector
+
 # define model
 model = Sequential()
-e = Embedding(vocab_size, 300, weights=[embedding_matrix], input_length=20, trainable=False)
+e = Embedding(vocab_size, 300, weights=[embedding_matrix], input_length=max_size, trainable=False)
 model.add(e)
 model.add(Flatten())
 model.add(Dense(1, activation='sigmoid'))
@@ -61,7 +64,13 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 # summarize the model
 print(model.summary())
 # fit the model
-model.fit(padded_docs, labels, epochs=50, verbose=0)
-# evaluate the model
-loss, accuracy = model.evaluate(padded_docs, labels, verbose=0)
+model.fit(padded_docs, train_class, epochs=50, verbose=0)
+
+# evaluate the model, prepare tokenizer
+t = Tokenizer()
+t.fit_on_texts(validation_data)
+vocab_size = len(t.word_index) + 1
+encoded_docs = t.texts_to_sequences(validation_data)
+padded_docs = pad_sequences(encoded_docs, maxlen=max_size, padding='post')
+loss, accuracy = model.evaluate(padded_docs, validation_class, verbose=0)
 print('Accuracy: %f' % (accuracy*100))
