@@ -12,3 +12,6 @@ La segunda red necesita todos los otros archivos para ejecutar correctamente,
 y se puede correr la misma ejecutando el siguiente comando:
 python3 main.py
 
+# Seccion Keras
+Aqui tenemos una red neuronal implementada con keras, utilizando la capa de embeddings brindada por los docentes
+La misma ejecutando el siguiente comando: python3 example.py
