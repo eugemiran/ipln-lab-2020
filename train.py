@@ -32,7 +32,7 @@ def readFile(path):
 		return docs, labels, max_size
 
 #fasttext.util.download_model('es', if_exists='ignore')  # English
-#ft = fasttext.load_model('cc.es.300.bin')
+ft = fasttext.load_model('cc.es.300.bin')
 
 train_data, train_class, max_size_train = readFile("resources/train.csv")
 validation_data, validation_class, max_size_validation = readFile("resources/val.csv")
@@ -74,8 +74,10 @@ for word, i in t.word_index.items():
 	embedding_vector = embeddings_index.get(word)
 	if embedding_vector is not None:
 		embedding_matrix[i] = embedding_vector 
-	else:
-		print("add word to vector")
+#	else:
+#		print("add " + str(word) + " to embeddings")
+#		near_neighbor = ft.get_nearest_neighbors(str(word), 1)[0]
+#		embedding_matrix[i] = ft.get_word_vector(str(near_neighbor[1]))
 
 # define model
 model = Sequential()
