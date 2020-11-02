@@ -11,6 +11,8 @@ La funcion loadVectors carga el archivo de vectores "fasttext.es.300.txt" brinda
 En la sección comentada, se utiliza la librería propia de fasttext, que descarga el mismo archivo de vectores "fasttext.es.300" pero con un formato distinto, con el cual se pueden usar las distintas funcionalidades que provee la librería.
 Estaría bueno utilizar las funciones que la librería ofrece para manejar los vectores.
 
-# Seccion keras, sección a utilizar 
-Aqui tenemos una red neuronal implementada con keras, utilizando la capa de embeddings brindada por los docentes
-La misma ejecutando el siguiente comando: python3 example.py
+# Seccion train, sección a utilizar 
+Aqui tenemos una red neuronal implementada con keras, que utiliza distintos modelos para clasificar los tweets.
+Todos los modelos utilizan una capa de embeddings, y una capa densa con una neurona de salida, para clasificar positiva o negativamente a un tweet.
+Los modelos difieren en las capas intermedias, siendo las mismas capas simples, LSTM, Bidireccionales, Convolucionales, etc.
+Para ejecutar el entrenamiento, correr: python3 train.py
