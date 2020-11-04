@@ -1,17 +1,18 @@
 import pandas as pd
+import re
 
 TWEET = "Tweet"
 ES_ODIO = "EsOdio"
 COL_NAMES = [TWEET, ES_ODIO]
 
 def toLowerCase(text):
-  return text
+  return text.lower()
 
 def removeUrl(text):
   return text
 
 def removePunctuation(text):
-  return text
+  return re.sub('[\W_]+', ' ',text)
 
 def removeRepetitions(text):
   return text
