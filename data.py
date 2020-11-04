@@ -18,13 +18,13 @@ def removeRepetitions(text):
   return text
 
 def removeUsers(text):
-  return text
+  return re.sub("\\@.*?\\ ", "USER ", text)
 
 def removeEmojis(text):
   return text
 
 def removeHashtags(text):
-  return text
+  return re.sub(r"#", "", text)
 
 
 class Data():
@@ -47,11 +47,11 @@ class Data():
     self.val = val
 
   def preprocess(self, text):
-    text = toLowerCase(text)
     text = removeUrl(text)
-    text = removePunctuation(text)
-    text = removeRepetitions(text)
-    text = removeUsers(text)
-    text = removeEmojis(text)
     text = removeHashtags(text)
+    text = removeEmojis(text)
+    text = toLowerCase(text)
+    text = removeUsers(text)
+    text = removeRepetitions(text)
+    text = removePunctuation(text)
     return text
