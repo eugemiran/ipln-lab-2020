@@ -14,6 +14,7 @@ from keras.layers import Conv1D
 from keras.layers import GlobalMaxPooling1D
 from keras.layers import Bidirectional
 from keras.layers import Embedding
+import numpy as np
 
 import fasttext
 import fasttext.util
@@ -113,7 +114,13 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 print(model.summary())
 
 # fit for simple model
-#model.fit(padded_docs, train_class, epochs=50, verbose=1)
+
+######## Lines that fixed the error
+padded_docs = np.array(padded_docs)
+train_class = np.array(train_class)
+###############################
+
+model.fit(padded_docs, train_class, epochs=50, verbose=1)
 
 # fit for lstm model
 model.fit(padded_docs, train_class, epochs=5, batch_size=128, verbose=1)
@@ -124,5 +131,8 @@ t.fit_on_texts(validation_data)
 vocab_size = len(t.word_index) + 1
 encoded_docs = t.texts_to_sequences(validation_data)
 padded_docs = pad_sequences(encoded_docs, maxlen=max_size, padding='post')
+######## Lines that fixed the error
+validation_class = np.array(validation_class)
+#############################################
 loss, accuracy = model.evaluate(padded_docs, validation_class, verbose=1)
 print('Accuracy: %f' % (accuracy*100))
