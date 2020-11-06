@@ -14,7 +14,7 @@ def removeUrl(text):
 def removePunctuation(text):
   return re.sub('[\W_]+', ' ',text)
 
-def removeRepetitions(text):
+def removeRepetitions(text): ##Remueve dos espacios?
   def repl(matchobj):
     c=matchobj.group(0)
     return c[0]
@@ -30,6 +30,18 @@ def removeHashtags(text):
   #return re.sub(r'\#[\w\_]+','HASHTAG' ,text)
   return re.sub(r"#", "", text)
 
+def removeLaughter(text):
+  return re.sub(r"((j|J)aja[\w]*)|((j|J)ajs[\w]*)|((j|J)eje[\w]*)|(JAJA[\w]*)", "jaja", text)
+
+def removeLaughter2(text):
+  def repl(matchobj):
+    c=matchobj.group(0)
+    laugth=re.sub(r"((j|J)aja[\w]*)|((j|J)ajs[\w]*)|((j|J)eje[\w]*)","",c)
+    return laugth
+  return re.sub(r"([\w]*(j|J)aja[\w]*)|([\w]*(j|J)ajs[\w]*)|([\w]*(j|J)eje[\w]*)",repl, text)+" "+"jaja"
+
+def removen(text):
+  return re.sub(r'\\n', "",text)
 
 class Data():
   def __init__(self):
@@ -51,6 +63,7 @@ class Data():
     self.val = val
 
   def preprocess(self, text):
+    text = removen(text)
     text = removeUrl(text)
     text = removeHashtags(text)
     text = removeEmojis(text)
@@ -58,13 +71,10 @@ class Data():
     text = removeUsers(text)
     text = removeRepetitions(text)
     text = removePunctuation(text)
+    text = removeLaughter(text)
     return text
 
 def main():
-    x=Data()
-    print(x.train.iloc[0].Tweet)
-    print(x.test.iloc[0].Tweet)
-    print(x.test.iloc[59].Tweet)
 
 if __name__ == "__main__":
     main()

@@ -33,7 +33,9 @@ def readFile(path):
 		return docs, labels, max_size
 
 #fasttext.util.download_model('es', if_exists='ignore')  # English
-#ft = fasttext.load_model('cc.es.300.bin')
+#
+# ft = fasttext.load_model('cc.es.300.bin')
+
 
 train_data, train_class, max_size_train = readFile("resources/train.csv")
 validation_data, validation_class, max_size_validation = readFile("resources/val.csv")
