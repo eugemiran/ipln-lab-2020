@@ -20,9 +20,6 @@ def removeRepetitions(text):
 def removeUsers(text):
   return re.sub("\\@.*?\\ ", "USER ", text)
 
-def removeEmojis(text):
-  return text
-
 def removeHashtags(text):
   return re.sub(r"#", "", text)
 
@@ -62,7 +59,6 @@ class Data():
     text = removen(text)
     text = removeUrl(text)
     text = removeHashtags(text)
-    text = removeEmojis(text)
     text = toLowerCase(text)
     text = removeUsers(text)
     text = removeRepetitions(text)
