@@ -1,9 +1,6 @@
 import pandas as pd
 import re
-
-TWEET = "Tweet"
-ES_ODIO = "EsOdio"
-COL_NAMES = [TWEET, ES_ODIO]
+from constants import TWEET, ES_ODIO, COL_NAMES
 
 def toLowerCase(text):
   return text.lower()
@@ -14,7 +11,7 @@ def removeUrl(text):
 def removePunctuation(text):
   return re.sub('[\W_]+', ' ',text)
 
-def removeRepetitions(text): ##Remueve dos espacios?
+def removeRepetitions(text):
   def repl(matchobj):
     c=matchobj.group(0)
     return c[0]
@@ -27,7 +24,6 @@ def removeEmojis(text):
   return text
 
 def removeHashtags(text):
-  #return re.sub(r'\#[\w\_]+','HASHTAG' ,text)
   return re.sub(r"#", "", text)
 
 def removeLaughter(text):
@@ -75,6 +71,7 @@ class Data():
     return text
 
 def main():
+  pass
 
 if __name__ == "__main__":
-    main()
+  main()
