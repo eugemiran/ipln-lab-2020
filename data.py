@@ -1,6 +1,11 @@
 import pandas as pd
 import re
 from constants import TWEET, ES_ODIO, COL_NAMES
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 
 def toLowerCase(text):
   return text.lower()
@@ -36,6 +41,11 @@ def removeLaughter2(text):
 def removen(text):
   return re.sub(r'\\n', "",text)
 
+def RemoveStopWords(dataset):
+  stop = stopwords.words('spanish')
+  important_words = dataset['Tweet'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))
+  return important_words
+
 class Data():
   def __init__(self):
     test = pd.read_csv("./resources/test.csv", names=COL_NAMES, sep="\t")
@@ -50,6 +60,10 @@ class Data():
     
     for i , row in val.iterrows():
       val.at[i,'Tweet'] = self.preprocess(row[TWEET])
+
+    test.Tweet=RemoveStopWords(test)
+    train.Tweet=RemoveStopWords(train)
+    val.Tweet=RemoveStopWords(val)
 
     self.test = test
     self.train = train
