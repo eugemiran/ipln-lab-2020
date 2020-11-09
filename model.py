@@ -20,13 +20,14 @@ def getMaxSize(dataset):
 
 class Model():
   # We need the val_dataset in the constructor to find the max size
-  def __init__(self, model_type, train_dataset, val_dataset):
+  def __init__(self, model_type, train_dataset, val_dataset, epochs):
     self.train_dataset = train_dataset[TWEET]
     self.train_labels = np.array(train_dataset[ES_ODIO])
     self.val_dataset = val_dataset[TWEET]
     self.val_labels = np.array(val_dataset[ES_ODIO])
     self.max_size =  max(getMaxSize(train_dataset[TWEET]), getMaxSize(val_dataset[TWEET]))
     self.model = None
+    self.epochs= None
     self.train_padded_docs = None
     self.type = model_type
     self.initModel()
@@ -64,8 +65,8 @@ class Model():
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
-  def train(self, epochs = 50):
-    self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, verbose=1)    
+  def train(self, epochs):
+    self.model.fit(self.train_padded_docs, self.train_labels, self.epochs, verbose=1)    
 
 
   def eval(self):
@@ -76,6 +77,8 @@ class Model():
     padded_docs = pad_sequences(encoded_docs, maxlen=self.max_size, padding='post')
     loss, accuracy = self.model.evaluate(padded_docs, self.val_labels, verbose=1)
     print('Accuracy: %f' % (accuracy*100))
+    return (accuracy*100)
+    
   
   def initModel(self):
     # prepare tokenizer

@@ -88,12 +88,12 @@ e = Embedding(vocab_size, 300, weights=[embedding_matrix], input_length=max_size
 model.add(e)
 
 #Simple model
-#model.add(Flatten())
-#model.add(Dense(1, activation='sigmoid'))
+model.add(Flatten())
+model.add(Dense(1, activation='sigmoid'))
 
 #LSTM model
-model.add(LSTM(128, dropout=0.5))
-model.add(Dense(1, activation='sigmoid'))
+#model.add(LSTM(128, dropout=0.5))
+#model.add(Dense(1, activation='sigmoid'))
 
 #LSTM model version 2
 #model.add(SpatialDropout1D(0.25))
