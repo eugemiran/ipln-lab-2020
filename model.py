@@ -20,14 +20,15 @@ def getMaxSize(dataset):
 
 class Model():
   # We need the val_dataset in the constructor to find the max size
-  def __init__(self, model_type, train_dataset, val_dataset, epochs):
+  def __init__(self, model_type, train_dataset, val_dataset, neurons, dropout):
     self.train_dataset = train_dataset[TWEET]
     self.train_labels = np.array(train_dataset[ES_ODIO])
     self.val_dataset = val_dataset[TWEET]
     self.val_labels = np.array(val_dataset[ES_ODIO])
     self.max_size =  max(getMaxSize(train_dataset[TWEET]), getMaxSize(val_dataset[TWEET]))
     self.model = None
-    self.epochs= None
+    self.neurons=neurons
+    self.dropout=dropout
     self.train_padded_docs = None
     self.type = model_type
     self.initModel()
@@ -41,18 +42,18 @@ class Model():
       model.add(Flatten())
 
     elif (self.type == MODEL_TYPES["LSTM1"]):
-      model.add(LSTM(128, dropout=0.5))
+      model.add(LSTM(self.neurons, dropout=self.dropout))
 
     elif (self.type == MODEL_TYPES["LSTM2"]):
       model.add(SpatialDropout1D(0.25))
-      model.add(LSTM(128, dropout=0.5, recurrent_dropout=0.5))
+      model.add(LSTM(self.neurons, dropout=self.dropout, recurrent_dropout=self.dropout))
       model.add(Dropout(0.2))
 
     elif (self.type == MODEL_TYPES["BIDIRECTIONAL"]):
-      model.add(Bidirectional(LSTM(128,dropout=0.3)))
+      model.add(Bidirectional(LSTM(self.neurons,dropout=self.dropout)))
 
     else:
-      model.add(Conv1D(128, 5, activation='relu'))
+      model.add(Conv1D(self.neurons, 5, activation='relu'))
       model.add(GlobalMaxPooling1D())
     
     # else:
@@ -65,8 +66,11 @@ class Model():
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
-  def train(self, epochs):
-    self.model.fit(self.train_padded_docs, self.train_labels, self.epochs, verbose=1)    
+  def train(self, epochs, batchs):
+    if (self.type == MODEL_TYPES["SIMPLE"]):
+      self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, verbose=1)
+    else:
+       self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, batch_size=batchs, verbose=1)
 
 
   def eval(self):
