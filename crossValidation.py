@@ -16,11 +16,11 @@ batchs=[64,128,256,512]
 types = [MODEL_TYPES["SIMPLE"], MODEL_TYPES["LSTM1"], MODEL_TYPES["LSTM2"], MODEL_TYPES["CONVOLUTIONAL"], MODEL_TYPES["BIDIRECTIONAL"]]
 results=[]
 cont=0
+res=open('res.txt','w')
 
 for model_type in types:
-  print('Modelo: %s' % (model_type))
   if model_type==MODEL_TYPES["SIMPLE"]:
-    print('Ajuste de epocas.')    
+    res.write('Modelo Simple \n')
     for e in epochs_simple:
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
@@ -28,35 +28,39 @@ for model_type in types:
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train,  neurons=128, dropout=0.5,  val_dataset=X_test)
         m.train(e,0)
-        acurrency = m.eval()
-        cont=cont+acurrency
+        acurrency,f1_score = m.eval()
+        cont=cont+f1_score
       cont=cont/l
-      print('Promedio de acurrency para esta epoca: %f' % (cont))
+      res.write('Promedio de f1 para esta epoca: %f para el modelo %s \n' % (cont,model_type))
       results.append(cont)
       cont=0
     for r in results:
-      print('Promedio de cada uno: %f' % (r))
-    results=[]
+      res.write('Promedio de cada uno: %f para el modelo %s \n' % (r,model_type))
+    results=[]  
   else:  #MODELOS NO SIMPLES
+    res.close()
+    res=open('res.txt','w')
+    res.write('Modelos No Simples \n')
     for drop in dropout:                                                       
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=drop, val_dataset=X_test)
         m.train(2,128)
-        acurrency = m.eval()
-        print('Acurrency: %f' % (acurrency))
-        cont=cont+acurrency
-        print('Sumatorias de acurrency: %f' % (cont))
+        acurrency,f1_score = m.eval()
+        res.write('f1: %f model %s' % (f1_score,model_type))
+        cont=cont+f1_score
+        res.write('Sumatorias de f1: %f model %s \n' % (cont,model_type))
       cont=cont/5
-      print('Promedio de dropout: %f' % (cont))
-      #print('COnt: %f' % (cont))
+      res.write('Promedio de dropout: %f model %s \n' % (cont,model_type))
       results.append(cont)
       cont=0
     for r in results:
-      print('Promedio de cada uno: %f' % (r))
+      res.write('Promedio de cada uno: %f  model %s \n' % (r,model_type))
     results=[]
-    print('Ajuste de epocas.')    
+    res.write('Ajuste de epocas \n')
+    res.close()
+    res=open('res.txt','w')
     for e in epochs:                                                              
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
@@ -64,19 +68,20 @@ for model_type in types:
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
         m.train(e,128)
-        acurrency = m.eval()
-        print('Acurrency: %f' % (acurrency))
-        cont=cont+acurrency
-        print('Sumatorias de acurrency: %f' % (cont))
+        acurrency,f1_score = m.eval()
+        res.write('f1: %f model %s \n' % (f1_score,model_type))
+        cont=cont+f1_score
+        res.write('Sumatorias de f1: %f model %s \n' % (cont,model_type))
       cont=cont/l
-      print('Promedio para esta epoca: %f' % (cont))
-      #print('COnt: %f' % (cont))
+      res.write('Promedio para esta epoca: %f model %s \n' % (cont,model_type))
       results.append(cont)
       cont=0
     for r in results:
-      print('Promedio de cada uno: %f' % (r))
+      res.write('Promedio de cada uno: %f model  %s \n' % (r,model_type))
     results=[]
-    print('Ajuste de neuronas.')    
+    res.write('Ajuste de neuronas \n')
+    res.close()
+    res=open('res.txt','w')    
     for n in neurons:                                                         
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
@@ -84,19 +89,20 @@ for model_type in types:
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=n, dropout=0.5, val_dataset=X_test)
         m.train(25,128)
-        acurrency = m.eval()
-        print('Acurrency: %f' % (acurrency))
-        cont=cont+acurrency
-        print('Sumatorias de acurrency: %f' % (cont))
+        acurrency,f1_score = m.eval()
+        res.write('f1: %f model  %s \n' % (f1_score,model_type))
+        cont=cont+f1_score
+        res.write('Sumatorias de f1: %f model %s  \n' % (cont,model_type))
       cont=cont/l
-      print('Promedio de neuronas : %f' % (cont))
-      #print('COnt: %f' % (cont))
+      res.write('Promedio de neuronas : %f  \n' % (cont))
       results.append(cont)
       cont=0
     for r in results:
-      print('Promedio de cada uno: %f' % (r))
+      res.write('Promedio de cada uno: %f model %s \n' % (r,model_type))
     results=[]
-    print('Ajuste de batchs.')    
+    res.write('Ajuste de batchs \n') 
+    res.close()
+    res=open('res.txt','w')  
     for b in batchs:                                                       
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
@@ -104,16 +110,16 @@ for model_type in types:
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
         m.train(25,b)
-        acurrency = m.eval()
-        print('Acurrency: %f' % (acurrency))
-        cont=cont+acurrency
-        print('Sumatorias de acurrency: %f' % (cont))
+        acurrency,f1_score = m.eval()
+        res.write('f1: %f model %s \n' % (f1_score,model_type))
+        cont=cont+f1_score
+        res.write('Sumatorias de f1: %f model %s \n' % (cont,model_type))
       cont=cont/l
-      print('Promedio de batches : %f' % (cont))
+      res.write('Promedio de batches : %f model %s \n' % (cont,model_type))
       results.append(cont)
       cont=0
     for r in results:
-      print('Promedio de cada uno: %f' % (r))
+      res.write('Promedio de cada uno: %f model %s \n' % (r,model_type))
     results=[]
-    print('Ajuste de dropout.')    
-    
+    res.write('Ajuste de dropout \n')    
+res.close()

@@ -84,9 +84,9 @@ class Model():
 
   def train(self, epochs, batchs):
     if (self.type == MODEL_TYPES["SIMPLE"]):
-      self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, verbose=1)
+      self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, verbose=0)
     else:
-       self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, batch_size=batchs, verbose=1)
+       self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, batch_size=batchs, verbose=0)
 
 
   def eval(self):
@@ -95,13 +95,13 @@ class Model():
     t.fit_on_texts(self.val_dataset)
     encoded_docs = t.texts_to_sequences(self.val_dataset)
     padded_docs = pad_sequences(encoded_docs, maxlen=self.max_size, padding='post')
-    loss, accuracy, f1_score, precision, recall = self.model.evaluate(padded_docs, self.val_labels, verbose=1)
+    loss, accuracy, f1_score, precision, recall = self.model.evaluate(padded_docs, self.val_labels, verbose=0)
     print('Accuracy: %f' % (accuracy*100))
     print('Precision: %f' % (precision*100))
     print('Recall: %f' % (recall*100))
     print('F1: %f' % (f1_score*100))
     
-    return (accuracy*100)
+    return (accuracy*100,f1_score*100)
     
   
   def initModel(self):
