@@ -3,11 +3,27 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Dense, Flatten, LSTM, Dropout, SpatialDropout1D, Conv1D
 from keras.layers import GlobalMaxPooling1D, Bidirectional, Embedding
-
+from keras import backend as K
 import numpy as np
 import tensorflow as tf
-
 from constants import TWEET, ES_ODIO, MODEL_TYPES
+
+def recall_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    recall = true_positives / (possible_positives + K.epsilon())
+    return recall
+
+def precision_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    precision = true_positives / (predicted_positives + K.epsilon())
+    return precision
+
+def f1_m(y_true, y_pred):
+    precision = precision_m(y_true, y_pred)
+    recall = recall_m(y_true, y_pred)
+    return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
 def getMaxSize(dataset):
   max_size = 0
@@ -63,7 +79,7 @@ class Model():
     model.add(Dense(1, activation='sigmoid'))
     
     # Compile the model
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc',f1_m,precision_m, recall_m])
     return model
 
   def train(self, epochs, batchs):
@@ -79,8 +95,12 @@ class Model():
     t.fit_on_texts(self.val_dataset)
     encoded_docs = t.texts_to_sequences(self.val_dataset)
     padded_docs = pad_sequences(encoded_docs, maxlen=self.max_size, padding='post')
-    loss, accuracy = self.model.evaluate(padded_docs, self.val_labels, verbose=1)
+    loss, accuracy, f1_score, precision, recall = self.model.evaluate(padded_docs, self.val_labels, verbose=1)
     print('Accuracy: %f' % (accuracy*100))
+    print('Precision: %f' % (precision*100))
+    print('Recall: %f' % (recall*100))
+    print('F1: %f' % (f1_score*100))
+    
     return (accuracy*100)
     
   

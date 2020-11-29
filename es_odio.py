@@ -4,7 +4,7 @@ import model
 
 def main():
     datasets = data.Data()
-    model_type = MODEL_TYPES["SIMPLE"] # HERE GOES THE MODEL WE CONFIGURED IN CORSS VALIDATION
+    model_type = MODEL_TYPES["LSTM1"]  # HERE GOES THE MODEL WE CONFIGURED IN CORSS VALIDATION
     epochs = 50                        # HERE GOES THE EPOCHS WE CONFIGURED IN CORSS VALIDATION
     neurons = 128                      # HERE GOES THE NEURONS WE CONFIGURED IN CORSS VALIDATION
     dropout = 0.5                      # HERE GOES THE DROPOUT WE CONFIGURED IN CORSS VALIDATION
