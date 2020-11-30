@@ -25,10 +25,15 @@ removeLaughter(text) => Modifica algunas acepciones de risa por "jaja" por ejemp
 2-Modelos elegidos
 Librerias utilizadas: numpy version 1.18.2 , keras version 2.4.3 , tensorflow version 2.3.1 
 
-2.1- Modelo de red neuronal simple
-2.2- Redes neuronales LSTM
-2.3- Red neuronal Bidireccional
-2.4- Red neuronal Convolucional
+En el archivo model.py se encuentra definida la clase Model la cual crea el modelo y contienen las diferentes funciones que es de interes aplicar sobre los modelos como por ejmeplo eval() que evalua el modelo o train() que lo entrena.
+Para inicializar los modelos utilizamos los embbeding provistos , inicialmente toquenizamos los tweets y generamos una matriz de embbedings donde por cada palabra del volcabulario encontrada colocamos su vector de embedings como columna en la matriz.
+Luego esa matriz es utilizada como primera capa en nuestras redes neuronales.
+
+2.1- Modelos generados:
+Modelo de red neuronal simple =>
+Redes neuronales LSTM =>
+Red neuronal Bidireccional =>
+Red neuronal Convolucional =>
 
 3- Cross Validation
 Para encontrar el mejor modelo con sus mejores parametros , se implemento validacion cruzada la misma se encuentra en el archivo CrossValidation.py y en el archivo CrossValidation.ipynb se encuenta con detalle como se realizo este procedimiento.
@@ -45,4 +50,5 @@ En la sección comentada, se utiliza la librería propia de fasttext, que descar
 Estaría bueno utilizar las funciones que la librería ofrece para manejar los vectores.
 
 5-Como correr la tarea
-Para ejecutar el código debemos ejecutar solamente python3 es_odio.py
+En el archivo es_odio.py se encuenta la clase Model instanciada con los paramentros que encontramos optimos para generarla, alli mismo se llama a la funcion train() y luego eval().
+Para ejecutar la tarea se debe ejecutar simplemetente python3 es_odio.py
