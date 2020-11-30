@@ -36,7 +36,7 @@ def getMaxSize(dataset):
 
 class Model():
   # We need the val_dataset in the constructor to find the max size
-  def __init__(self, model_type, train_dataset, val_dataset, neurons, dropout):
+  def __init__(self, model_type, train_dataset, val_dataset, neurons, dropout, path, test_files=None):
     self.train_dataset = train_dataset[TWEET]
     self.train_labels = np.array(train_dataset[ES_ODIO])
     self.val_dataset = val_dataset[TWEET]
@@ -45,6 +45,8 @@ class Model():
     self.model = None
     self.neurons=neurons
     self.dropout=dropout
+    self.test_files=test_files
+    self.path = path
     self.train_padded_docs = None
     self.type = model_type
     self.initModel()
@@ -88,20 +90,32 @@ class Model():
     else:
        self.model.fit(self.train_padded_docs, self.train_labels, epochs=epochs, batch_size=batchs, verbose=0)
 
-
   def eval(self):
-    # evaluate the model, prepare tokenizer
-    t = Tokenizer()
-    t.fit_on_texts(self.val_dataset)
-    encoded_docs = t.texts_to_sequences(self.val_dataset)
-    padded_docs = pad_sequences(encoded_docs, maxlen=self.max_size, padding='post')
-    loss, accuracy, f1_score, precision, recall = self.model.evaluate(padded_docs, self.val_labels, verbose=0)
-    print('Accuracy: %f' % (accuracy*100))
-    print('Precision: %f' % (precision*100))
-    print('Recall: %f' % (recall*100))
-    print('F1: %f' % (f1_score*100))
-    
-    return (accuracy*100,f1_score*100,recall*100,precision*100)
+    if(self.test_files):
+      for name, current_test in self.test_files:
+        t = Tokenizer()
+        t.fit_on_texts(current_test)
+        encoded_docs = t.texts_to_sequences(current_test)
+        max_size =  max(getMaxSize(self.train_dataset), getMaxSize(current_test))
+        padded_docs = pad_sequences(encoded_docs, maxlen=max_size, padding='post')
+        predictions = self.model.predict_classes(padded_docs, verbose=1)
+        f=open(self.path + '/' + name + '.out','w')
+        for p in predictions:
+          f.write("%s\n" % p)
+        f.close()
+
+    else:
+      t = Tokenizer()
+      t.fit_on_texts(self.val_dataset)
+      encoded_docs = t.texts_to_sequences(self.val_dataset)
+      padded_docs = pad_sequences(encoded_docs, maxlen=self.max_size, padding='post')
+      loss, accuracy, f1_score, precision, recall = self.model.evaluate(padded_docs, self.val_labels, verbose=1)
+      print('Accuracy: %f' % (accuracy*100))
+      print('Precision: %f' % (precision*100))
+      print('Recall: %f' % (recall*100))
+      print('F1: %f' % (f1_score*100))
+
+      return (accuracy*100,f1_score*100,recall*100,precision*100)
     
   
   def initModel(self):
@@ -116,7 +130,8 @@ class Model():
 
     # load the whole embedding into memory
     embeddings_index = dict()
-    f = open('resources/fasttext.es.300.txt')
+    final = self.path + '/fasttext.es.300.txt'
+    f = open(self.path + '/fasttext.es.300.txt')
     for line in f:
         values = line.split()
         word = values[0]

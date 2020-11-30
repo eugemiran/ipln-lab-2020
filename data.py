@@ -47,10 +47,18 @@ def RemoveStopWords(dataset):
   return important_words
 
 class Data():
-  def __init__(self):
-    test = pd.read_csv("./resources/test.csv", names=COL_NAMES, sep="\t")
-    train = pd.read_csv("./resources/train.csv", names=COL_NAMES, sep="\t")
-    val = pd.read_csv("./resources/val.csv", names=COL_NAMES, sep="\t")
+  def __init__(self, path, test_names = None):
+    test = pd.read_csv(path + "/test.csv", names=COL_NAMES, sep="\t")
+    train = pd.read_csv(path + "/train.csv", names=COL_NAMES, sep="\t")
+    val = pd.read_csv(path + "/val.csv", names=COL_NAMES, sep="\t")
+
+    self.test_files = None
+    if (test_names):
+      test_files = []
+      for name in test_names:
+        test_files.append((name.replace('.csv', ''), pd.read_csv(path + "/" + name, sep="\t").iloc[:,0]))
+
+      self.test_files = test_files
 
     for i , row in test.iterrows():
       test.at[i,'Tweet'] = self.preprocess(row[TWEET])
