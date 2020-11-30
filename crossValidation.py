@@ -62,7 +62,7 @@ for model_type in types:
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=drop, val_dataset=X_test)
-        m.train(20,128)
+        m.train(10,128)
         accuracy,f1_score = m.eval()
         cont=cont+f1_score
         cont_accuracy=cont_accuracy+accuracy
@@ -118,7 +118,7 @@ for model_type in types:
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=n, dropout=0.5, val_dataset=X_test)
-        m.train(20,128)
+        m.train(10,128)
         accuracy,f1_score = m.eval()
         cont=cont+f1_score
         cont_accuracy=cont_accuracy+accuracy
@@ -146,7 +146,7 @@ for model_type in types:
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
-        m.train(20,b)
+        m.train(10,b)
         accuracy,f1_score = m.eval()
         cont=cont+f1_score
         cont_accuracy=cont_accuracy+accuracy
