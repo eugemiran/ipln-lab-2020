@@ -8,8 +8,8 @@ X = d.val[TWEET]
 Y = d.val[ES_ODIO]
 
 folds = KFold(n_splits=5)
-epochs_simple=[50,100,200,300,400,500]
-epochs=[25,50,75,100,125,150]
+epochs_simple=[10,20,50,100,200,300,400,500]
+epochs=[10,20,40,60,80,100]
 neurons=[1,4,16,32,64,128]
 dropout=[0.1,0.3,0.5,0.7]
 batchs=[16,32,64,128,256]
