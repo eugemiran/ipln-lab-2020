@@ -101,7 +101,7 @@ class Model():
     print('Recall: %f' % (recall*100))
     print('F1: %f' % (f1_score*100))
     
-    return (accuracy*100,f1_score*100)
+    return (accuracy*100,f1_score*100,recall*100,precision*100)
     
   
   def initModel(self):
