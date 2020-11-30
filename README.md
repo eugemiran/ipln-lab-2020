@@ -2,9 +2,9 @@
 Grupo 14 
 Integrantes :
 Agustina Sierra 4647235-6
-Agustina Salmanton xxxxxxx-x
-Eugenia Miranda xxxxxxx-x
-Sebastian Volti xxxxxxx-x
+Agustina Salmanton 4.877.872-8
+Eugenia Miranda 4.774.499-8
+Sebastian Volti 5.175.914-7
 
 1-Limpieza de datos
 Librerias utilizadas: Pandas version 1.0.3 , Re version 2.2.1 , nltk versiom 3.5
