@@ -8,19 +8,29 @@ X = d.val[TWEET]
 Y = d.val[ES_ODIO]
 
 folds = KFold(n_splits=5)
-epochs_simple=[100,200,300,400,500]
-epochs=[50,100,150,200,250]
-neurons=[1,4,16,32,64,128]
-dropout=[0.1,0.3,0.5]
-batchs=[64,128,256,512]
+#epochs_simple=[100,200,300,400,500]
+#epochs=[50,100,150,200,250]
+#neurons=[1,4,16,32,64,128]
+#dropout=[0.1,0.3,0.5]
+#batchs=[64,128,256,512]
+epochs_simple=[2,5]
+epochs=[2,5]
+neurons=[1,4]
+dropout=[0.1,0.3]
+batchs=[64,128]
 types = [MODEL_TYPES["SIMPLE"], MODEL_TYPES["LSTM1"], MODEL_TYPES["LSTM2"], MODEL_TYPES["CONVOLUTIONAL"], MODEL_TYPES["BIDIRECTIONAL"]]
 results=[]
+results_accuracy=[]
 cont=0
+cont_accuracy=0
 res=open('res.txt','w')
 
 for model_type in types:
   if model_type==MODEL_TYPES["SIMPLE"]:
-    res.write('Modelo Simple \n')
+    res.write('Modelo Simple: \n')
+    res.write('\n')
+    res.write('Ajuste epocas: \n')
+    res.write('\n')
     for e in epochs_simple:
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
@@ -28,39 +38,56 @@ for model_type in types:
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train,  neurons=128, dropout=0.5,  val_dataset=X_test)
         m.train(e,0)
-        acurrency,f1_score = m.eval()
+        accuracy,f1_score = m.eval()
         cont=cont+f1_score
+        cont_accuracy=cont_accuracy+accuracy
       cont=cont/l
-      res.write('Promedio de f1 para esta epoca: %f para el modelo %s \n' % (cont,model_type))
-      results.append(cont)
+      results.append((e,cont))
+
+      cont_accuracy=cont_accuracy/l
+      results_accuracy.append((e,cont_accuracy))
+
       cont=0
+      cont_accuracy=0
     for r in results:
-      res.write('Promedio de cada uno: %f para el modelo %s \n' % (r,model_type))
+      res.write('Promedio de F1-score para cada valor del hiperparametro epocas: %s \n' % (r,)) 
+    res.write('\n')
+    for ra in results_accuracy:
+      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
     results=[]  
+    results_accuracy=[]
   else:  #MODELOS NO SIMPLES
-    res.close()
-    res=open('res.txt','w')
-    res.write('Modelos No Simples \n')
+    res.write('Modelo %s \n' % (model_type))
+    res.write('\n')
+    res.write('Ajuste dropout: \n')
+    res.write('\n')
     for drop in dropout:                                                       
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=drop, val_dataset=X_test)
         m.train(2,128)
-        acurrency,f1_score = m.eval()
-        res.write('f1: %f model %s' % (f1_score,model_type))
+        accuracy,f1_score = m.eval()
         cont=cont+f1_score
-        res.write('Sumatorias de f1: %f model %s \n' % (cont,model_type))
-      cont=cont/5
-      res.write('Promedio de dropout: %f model %s \n' % (cont,model_type))
-      results.append(cont)
+        cont_accuracy=cont_accuracy+accuracy
+      cont=cont/l
+      results.append((drop,cont))
+
+      cont_accuracy=cont_accuracy/l
+      results_accuracy.append((drop,cont_accuracy))
+
       cont=0
+      cont_accuracy=0
     for r in results:
-      res.write('Promedio de cada uno: %f  model %s \n' % (r,model_type))
+      res.write('Promedio de F1-score para cada valor del hiperparametro dropout: %s \n' % (r,))
+    res.write('\n')
+    for ra in results_accuracy:
+      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
     results=[]
+    results_accuracy=[]
+    res.write('\n')
     res.write('Ajuste de epocas \n')
-    res.close()
-    res=open('res.txt','w')
+    res.write('\n')
     for e in epochs:                                                              
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
@@ -68,58 +95,78 @@ for model_type in types:
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
         m.train(e,128)
-        acurrency,f1_score = m.eval()
-        res.write('f1: %f model %s \n' % (f1_score,model_type))
+        accuracy,f1_score = m.eval()
         cont=cont+f1_score
-        res.write('Sumatorias de f1: %f model %s \n' % (cont,model_type))
+        cont_accuracy=cont_accuracy+accuracy
       cont=cont/l
-      res.write('Promedio para esta epoca: %f model %s \n' % (cont,model_type))
-      results.append(cont)
+      results.append((e,cont))
+      
+      cont_accuracy=cont_accuracy/l
+      results_accuracy.append((e,cont_accuracy))
+
       cont=0
+      cont_accuracy=0
     for r in results:
-      res.write('Promedio de cada uno: %f model  %s \n' % (r,model_type))
+      res.write('Promedio de F1-score para cada valor del hiperparametro epocas: %s \n' % (r,))
+    res.write('\n')
+    for ra in results_accuracy:
+      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
     results=[]
+    results_accuracy=[]
+    res.write('\n')
     res.write('Ajuste de neuronas \n')
-    res.close()
-    res=open('res.txt','w')    
+    res.write('\n')
     for n in neurons:                                                         
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=n, dropout=0.5, val_dataset=X_test)
-        m.train(25,128)
-        acurrency,f1_score = m.eval()
-        res.write('f1: %f model  %s \n' % (f1_score,model_type))
+        m.train(2,128)
+        accuracy,f1_score = m.eval()
         cont=cont+f1_score
-        res.write('Sumatorias de f1: %f model %s  \n' % (cont,model_type))
+        cont_accuracy=cont_accuracy+accuracy
       cont=cont/l
-      res.write('Promedio de neuronas : %f  \n' % (cont))
-      results.append(cont)
+      results.append((n,cont))
+      
+      cont_accuracy=cont_accuracy/l
+      results_accuracy.append((n,cont_accuracy))
+
       cont=0
+      cont_accuracy=0
     for r in results:
-      res.write('Promedio de cada uno: %f model %s \n' % (r,model_type))
+      res.write('Promedio de F1-score para cada valor del hiperparametro neuronas: %s \n' % (r,))
+    res.write('\n')
+    for ra in results_accuracy:
+      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
     results=[]
+    results_accuracy=[]
+    res.write('\n')
     res.write('Ajuste de batchs \n') 
-    res.close()
-    res=open('res.txt','w')  
+    res.write('\n')
     for b in batchs:                                                       
       l=len(list(folds.split(d.val)))
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
-        m.train(25,b)
-        acurrency,f1_score = m.eval()
-        res.write('f1: %f model %s \n' % (f1_score,model_type))
+        m.train(2,b)
+        accuracy,f1_score = m.eval()
         cont=cont+f1_score
-        res.write('Sumatorias de f1: %f model %s \n' % (cont,model_type))
+        cont_accuracy=cont_accuracy+accuracy
       cont=cont/l
-      res.write('Promedio de batches : %f model %s \n' % (cont,model_type))
-      results.append(cont)
+      results.append((b,cont))
+      
+      cont_accuracy=cont_accuracy/l
+      results_accuracy.append((b,cont_accuracy))
+
       cont=0
+      cont_accuracy=0
     for r in results:
-      res.write('Promedio de cada uno: %f model %s \n' % (r,model_type))
-    results=[]
-    res.write('Ajuste de dropout \n')    
+      res.write('Promedio de F1-score para cada valor del hiperparametro batchs: %s \n' % (r,))
+    res.write('\n')
+    for ra in results_accuracy:
+      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
+    results=[]  
+    results_accuracy=[] 
 res.close()
