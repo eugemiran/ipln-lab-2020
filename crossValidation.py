@@ -3,7 +3,8 @@ from constants import ES_ODIO, TWEET, MODEL_TYPES
 import data
 import model
 
-d = data.Data()
+PATH="./resources"
+d = data.Data(PATH)
 X = d.val[TWEET]
 Y = d.val[ES_ODIO]
 
@@ -35,7 +36,7 @@ for model_type in types:
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
-        m = model.Model(model_type=model_type, train_dataset=X_train,  neurons=128, dropout=0.5,  val_dataset=X_test)
+        m = model.Model(model_type=model_type, train_dataset=X_train,  neurons=128, dropout=0.5,  val_dataset=X_test, path=PATH)
         m.train(e,0)
         accuracy,f1_score,recall,precision = m.eval()
         cont=cont+f1_score
@@ -84,7 +85,7 @@ for model_type in types:
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
-        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=drop, val_dataset=X_test)
+        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=drop, val_dataset=X_test, path=PATH)
         m.train(10,128)
         accuracy,f1_score,recall,precision = m.eval()
         cont=cont+f1_score
@@ -131,7 +132,7 @@ for model_type in types:
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
-        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
+        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test, path=PATH)
         m.train(e,128)
         accuracy,f1_score,recall,precision = m.eval()
         cont=cont+f1_score
@@ -178,7 +179,7 @@ for model_type in types:
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
-        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=n, dropout=0.5, val_dataset=X_test)
+        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=n, dropout=0.5, val_dataset=X_test, path=PATH)
         m.train(10,128)
         accuracy,f1_score,recall,precision = m.eval()
         cont=cont+f1_score
@@ -225,7 +226,7 @@ for model_type in types:
       for train_index, test_index in folds.split(d.val):
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
-        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
+        m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test, path=PATH)
         m.train(10,b)
         accuracy,f1_score,recall,precision = m.eval()
         cont=cont+f1_score
