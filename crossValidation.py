@@ -52,6 +52,7 @@ for model_type in types:
     results=[]  
     results_accuracy=[]
   else:  #MODELOS NO SIMPLES
+    res.write('\n')
     res.write('Modelo %s \n' % (model_type))
     res.write('\n')
     res.write('Ajuste dropout: \n')
@@ -77,7 +78,7 @@ for model_type in types:
       res.write('Promedio de F1-score para cada valor del hiperparametro dropout: %s \n' % (r,))
     res.write('\n')
     for ra in results_accuracy:
-      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
+      res.write('Promedio de accuracy para cada valor del hiperparametro dropout: %s \n' % (ra,))
     results=[]
     results_accuracy=[]
     res.write('\n')
@@ -133,7 +134,7 @@ for model_type in types:
       res.write('Promedio de F1-score para cada valor del hiperparametro neuronas: %s \n' % (r,))
     res.write('\n')
     for ra in results_accuracy:
-      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
+      res.write('Promedio de accuracy para cada valor del hiperparametro neuronas: %s \n' % (ra,))
     results=[]
     results_accuracy=[]
     res.write('\n')
@@ -161,7 +162,7 @@ for model_type in types:
       res.write('Promedio de F1-score para cada valor del hiperparametro batchs: %s \n' % (r,))
     res.write('\n')
     for ra in results_accuracy:
-      res.write('Promedio de accuracy para cada valor del hiperparametro epocas: %s \n' % (ra,))
+      res.write('Promedio de accuracy para cada valor del hiperparametro batchs: %s \n' % (ra,))
     results=[]  
     results_accuracy=[] 
 res.close()
