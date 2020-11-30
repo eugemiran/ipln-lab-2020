@@ -30,15 +30,22 @@ Para inicializar los modelos utilizamos los embbeding provistos , inicialmente t
 Luego esa matriz es utilizada como primera capa en nuestras redes neuronales.
 
 2.1- Modelos generados:
-Modelo de red neuronal simple =>
-Redes neuronales LSTM =>
-Red neuronal Bidireccional =>
-Red neuronal Convolucional =>
+Modelo de red neuronal simple
+Redes neuronales LSTM1
+Redes neuronales LSTM2
+Red neuronal Bidireccional 
+Red neuronal Convolucional 
+En el archivo CrossValidation.ipynb se encuenta un detalle de las mismas.
 
 3- Cross Validation
 Para encontrar el mejor modelo con sus mejores parametros , se implemento validacion cruzada la misma se encuentra en el archivo CrossValidation.py y en el archivo CrossValidation.ipynb se encuenta con detalle como se realizo este procedimiento.
 Los parametros que se ajustaron aqui son : epochs,neurons,dropout,batchs,model_type.
-Se encontro que los mejores paramentros fueron ####
+Se encontro que los mejores paramentros fueron :
+Modelo Convolutional
+	dropout = 0.1
+	epocas = 10
+	neuronas = 64
+	batches = 64
 
 
 4-Algunas funciones que pueden ser utiles
@@ -49,6 +56,9 @@ La funcion loadVectors carga el archivo de vectores "fasttext.es.300.txt" brinda
 En la sección comentada, se utiliza la librería propia de fasttext, que descarga el mismo archivo de vectores "fasttext.es.300" pero con un formato distinto, con el cual se pueden usar las distintas funcionalidades que provee la librería.
 Estaría bueno utilizar las funciones que la librería ofrece para manejar los vectores.
 
-5-Como correr la tarea
-En el archivo es_odio.py se encuenta la clase Model instanciada con los paramentros que encontramos optimos para generarla, alli mismo se llama a la funcion train() y luego eval().
-Para ejecutar la tarea se debe ejecutar simplemetente python3 es_odio.py
+5-Resultados Obtenidos :
+Ejecutando la tarea con el comando python3 es_odio.py ./resources :
+Accuracy: 55.147058
+Precision: 57.631707
+Recall: 45.093542
+F1: 49.283975
