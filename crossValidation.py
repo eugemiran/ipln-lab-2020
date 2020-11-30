@@ -8,16 +8,11 @@ X = d.val[TWEET]
 Y = d.val[ES_ODIO]
 
 folds = KFold(n_splits=5)
-#epochs_simple=[100,200,300,400,500]
-#epochs=[50,100,150,200,250]
-#neurons=[1,4,16,32,64,128]
-#dropout=[0.1,0.3,0.5]
-#batchs=[64,128,256,512]
-epochs_simple=[2,5]
-epochs=[2,5]
-neurons=[1,4]
-dropout=[0.1,0.3]
-batchs=[64,128]
+epochs_simple=[50,100,200,300,400,500]
+epochs=[25,50,75,100,125,150]
+neurons=[1,4,16,32,64,128]
+dropout=[0.1,0.3,0.5,0.7]
+batchs=[16,32,64,128,256]
 types = [MODEL_TYPES["SIMPLE"], MODEL_TYPES["LSTM1"], MODEL_TYPES["LSTM2"], MODEL_TYPES["CONVOLUTIONAL"], MODEL_TYPES["BIDIRECTIONAL"]]
 results=[]
 results_accuracy=[]
@@ -66,7 +61,7 @@ for model_type in types:
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=drop, val_dataset=X_test)
-        m.train(2,128)
+        m.train(20,128)
         accuracy,f1_score = m.eval()
         cont=cont+f1_score
         cont_accuracy=cont_accuracy+accuracy
@@ -122,7 +117,7 @@ for model_type in types:
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=n, dropout=0.5, val_dataset=X_test)
-        m.train(2,128)
+        m.train(20,128)
         accuracy,f1_score = m.eval()
         cont=cont+f1_score
         cont_accuracy=cont_accuracy+accuracy
@@ -150,7 +145,7 @@ for model_type in types:
         X_train = d.val.iloc[train_index]
         X_test = d.val.iloc[test_index]
         m = model.Model(model_type=model_type, train_dataset=X_train, neurons=128, dropout=0.5, val_dataset=X_test)
-        m.train(2,b)
+        m.train(20,b)
         accuracy,f1_score = m.eval()
         cont=cont+f1_score
         cont_accuracy=cont_accuracy+accuracy
