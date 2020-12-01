@@ -101,7 +101,7 @@ class Model():
         predictions = self.model.predict_classes(padded_docs, verbose=1)
         f=open(self.path + '/' + name + '.out','w')
         for p in predictions:
-          f.write("%s\n" % p)
+          f.write("%s\n" % p[0])
         f.close()
 
     else:
