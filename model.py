@@ -100,8 +100,11 @@ class Model():
         padded_docs = pad_sequences(encoded_docs, maxlen=max_size, padding='post')
         predictions = self.model.predict_classes(padded_docs, verbose=1)
         f=open(self.path + '/' + name + '.out','w')
-        for p in predictions:
-          f.write("%s\n" % p[0])
+        for i, p in enumerate(predictions):
+          if (i == len(predictions) - 1):
+            f.write("%s" % p[0])
+          else: 
+            f.write("%s\n" % p[0])
         f.close()
 
     else:

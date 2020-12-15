@@ -56,7 +56,7 @@ class Data():
     if (test_names):
       test_files = []
       for name in test_names:
-        test_files.append((name.replace('.csv', ''), pd.read_csv(path + "/" + name, sep="\t").iloc[:,0]))
+        test_files.append((name.replace('.csv', ''), pd.read_csv(path + "/" + name, names=COL_NAMES, sep="\t").iloc[:,0]))
 
       self.test_files = test_files
 
