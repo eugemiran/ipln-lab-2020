@@ -1,9 +1,9 @@
 # ipln-lab-2020
 Grupo 14 integrantes :
-- Agustina Sierra 4.647.235-6
-- Agustina Salmanton 4.877.872-8
-- Maria Eugenia Miranda 4.774.499-8
-- Sebastian Volti 5.175.914-7
+- Agustina Sierra
+- Agustina Salmanton
+- Maria Eugenia Miranda
+- Sebastian Volti
 
 ## Ejecucion 
 Para la ejecución hay que instalar los requerimientos mediante el comando:
